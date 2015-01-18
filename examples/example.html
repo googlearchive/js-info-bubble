@@ -184,6 +184,9 @@
 
         var arrowStyle = document.getElementById('arrowStyle').value;
         infoBubble.setArrowStyle(arrowStyle);
+
+        var closeSrc = document.getElementById('closeSrc').value;
+        infoBubble.setCloseSrc(closeSrc);
       }
 
       function addTab() {
@@ -287,6 +290,10 @@
           <option value="1">1</option>
           <option value="2">2</option>
         </select>
+      </div>
+      <div>
+        <label>closeSrc:</label>
+        <input type="text" id="closeSrc" value="https://maps.gstatic.com/intl/en_us/mapfiles/iw_close.gif"/>
       </div>
       <button id="update">Update styles</button>
     </div>

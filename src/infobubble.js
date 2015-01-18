@@ -1,6 +1,6 @@
 // ==ClosureCompiler==
 // @compilation_level ADVANCED_OPTIMIZATIONS
-// @externs_url http://closure-compiler.googlecode.com/svn/trunk/contrib/externs/maps/google_maps_api_v3.js
+// @externs_url https://raw.githubusercontent.com/google/closure-compiler/master/contrib/externs/maps/google_maps_api_v3_16.js
 // ==/ClosureCompiler==
 
 /**
@@ -90,8 +90,11 @@ function InfoBubble(opt_options) {
     options['arrowStyle'] = this.ARROW_STYLE_;
   }
 
-  this.buildDom_();
+  if (options['closeSrc'] == undefined) {
+    options['closeSrc'] = this.CLOSE_SRC_;
+  }
 
+  this.buildDom_();
   this.setValues(options);
 }
 window['InfoBubble'] = InfoBubble;
@@ -176,6 +179,12 @@ InfoBubble.prototype.BORDER_RADIUS_ = 10;
  */
 InfoBubble.prototype.BACKGROUND_COLOR_ = '#fff';
 
+/**
+ * Default close image source
+ * @const
+ * @private
+ */
+InfoBubble.prototype.CLOSE_SRC_ = 'https://maps.gstatic.com/intl/en_us/mapfiles/iw_close.gif';
 
 /**
  * Extends a objects prototype by anothers.
@@ -210,12 +219,10 @@ InfoBubble.prototype.buildDom_ = function() {
   // Close button
   var close = this.close_ = document.createElement('IMG');
   close.style['position'] = 'absolute';
-  close.style['width'] = this.px(12);
-  close.style['height'] = this.px(12);
   close.style['border'] = 0;
   close.style['zIndex'] = this.baseZIndex_ + 1;
   close.style['cursor'] = 'pointer';
-  close.src = 'https://maps.gstatic.com/intl/en_us/mapfiles/iw_close.gif';
+  close.src = this.get('closeSrc');
 
   var that = this;
   google.maps.event.addDomListener(close, 'click', function() {
@@ -760,6 +767,19 @@ InfoBubble.prototype.setPadding = function(padding) {
   this.set('padding', padding);
 };
 InfoBubble.prototype['setPadding'] = InfoBubble.prototype.setPadding;
+
+
+/**
+ * Set the close image url
+ *
+ * @param {string} src The url of the image used as a close icon
+ */
+InfoBubble.prototype.setCloseSrc = function(src) {
+  if (src && this.close_) {
+    this.close_.src = src;
+  }
+};
+InfoBubble.prototype['setCloseSrc'] = InfoBubble.prototype.setCloseSrc;
 
 
 /**
