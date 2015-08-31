@@ -23,6 +23,6 @@ Follow either of the two links above to access the appropriate CLA and
 instructions for how to sign and return it.
 
 When preparing your code, make sure to update the AUTHORS and CONTRIBUTORS file
-to reflect your contribtion.
+to reflect your contribution.
 
 Once we receive your CLA, we'll be able to review and accept your pull requests.
