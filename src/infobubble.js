@@ -98,7 +98,7 @@ function InfoBubble(opt_options) {
     this.buildCloseBtn = options.buildCloseBtn;
   }
 
-  this.buildDom_();
+  this.buildDom_(options);
   this.setValues(options);
 }
 window['InfoBubble'] = InfoBubble;
@@ -212,7 +212,7 @@ InfoBubble.prototype.extend = function(obj1, obj2) {
  * Builds the InfoBubble dom
  * @private
  */
-InfoBubble.prototype.buildDom_ = function() {
+InfoBubble.prototype.buildDom_ = function(opts) {
   var bubble = this.bubble_ = document.createElement('DIV');
   bubble.style['position'] = 'absolute';
   bubble.style['zIndex'] = this.baseZIndex_;
@@ -243,8 +243,8 @@ InfoBubble.prototype.buildDom_ = function() {
 
   // Content area
   var contentContainer = this.contentContainer_ = document.createElement('DIV');
-  contentContainer.style['overflowX'] = 'auto';
-  contentContainer.style['overflowY'] = 'auto';
+  contentContainer.style['overflowX'] = opts.overflowX || 'hidden';
+  contentContainer.style['overflowY'] = opts.overflowY || 'auto';
   contentContainer.style['cursor'] = 'default';
   contentContainer.style['clear'] = 'both';
   contentContainer.style['position'] = 'relative';
