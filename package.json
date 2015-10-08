@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "minify": "uglifyjs --compress --mangle -o src/infobubble.min.js -- src/infobubble.js"
+  }
+}

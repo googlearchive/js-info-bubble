@@ -94,7 +94,11 @@ function InfoBubble(opt_options) {
     options['closeSrc'] = this.CLOSE_SRC_;
   }
 
-  this.buildDom_();
+  if (options.buildCloseBtn) {
+    this.buildCloseBtn = options.buildCloseBtn;
+  }
+
+  this.buildDom_(options);
   this.setValues(options);
 }
 window['InfoBubble'] = InfoBubble;
@@ -208,7 +212,7 @@ InfoBubble.prototype.extend = function(obj1, obj2) {
  * Builds the InfoBubble dom
  * @private
  */
-InfoBubble.prototype.buildDom_ = function() {
+InfoBubble.prototype.buildDom_ = function(opts) {
   var bubble = this.bubble_ = document.createElement('DIV');
   bubble.style['position'] = 'absolute';
   bubble.style['zIndex'] = this.baseZIndex_;
@@ -216,13 +220,20 @@ InfoBubble.prototype.buildDom_ = function() {
   var tabsContainer = this.tabsContainer_ = document.createElement('DIV');
   tabsContainer.style['position'] = 'relative';
 
-  // Close button
-  var close = this.close_ = document.createElement('IMG');
+  var close;
+
+  if (this.buildCloseBtn) {
+    close = this.close_ = this.buildCloseBtn();
+  } else {
+    // Close button
+    close = this.close_ = document.createElement('IMG');
+    close.src = this.get('closeSrc');
+  }
+
   close.style['position'] = 'absolute';
   close.style['border'] = 0;
   close.style['zIndex'] = this.baseZIndex_ + 1;
   close.style['cursor'] = 'pointer';
-  close.src = this.get('closeSrc');
 
   var that = this;
   google.maps.event.addDomListener(close, 'click', function() {
@@ -232,8 +243,8 @@ InfoBubble.prototype.buildDom_ = function() {
 
   // Content area
   var contentContainer = this.contentContainer_ = document.createElement('DIV');
-  contentContainer.style['overflowX'] = 'auto';
-  contentContainer.style['overflowY'] = 'auto';
+  contentContainer.style['overflowX'] = opts.overflowX || 'hidden';
+  contentContainer.style['overflowY'] = opts.overflowY || 'auto';
   contentContainer.style['cursor'] = 'default';
   contentContainer.style['clear'] = 'both';
   contentContainer.style['position'] = 'relative';
@@ -282,11 +293,11 @@ InfoBubble.prototype.buildDom_ = function() {
   this.animationName_ = '_ibani_' + Math.round(Math.random() * 10000);
 
   var css = '.' + this.animationName_ + '{-webkit-animation-name:' +
-      this.animationName_ + ';-webkit-animation-duration:0.5s;' +
-      '-webkit-animation-iteration-count:1;}' +
-      '@-webkit-keyframes ' + this.animationName_ + ' {from {' +
-      '-webkit-transform: scale(0)}50% {-webkit-transform: scale(1.2)}90% ' +
-      '{-webkit-transform: scale(0.95)}to {-webkit-transform: scale(1)}}';
+    this.animationName_ + ';-webkit-animation-duration:0.5s;' +
+    '-webkit-animation-iteration-count:1;}' +
+    '@-webkit-keyframes ' + this.animationName_ + ' {from {' +
+    '-webkit-transform: scale(0)}50% {-webkit-transform: scale(1.2)}90% ' +
+    '{-webkit-transform: scale(0.95)}to {-webkit-transform: scale(1)}}';
 
   stylesheet.textContent = css;
   document.getElementsByTagName('head')[0].appendChild(stylesheet);
@@ -302,7 +313,7 @@ InfoBubble.prototype.setBackgroundClassName = function(className) {
   this.set('backgroundClassName', className);
 };
 InfoBubble.prototype['setBackgroundClassName'] =
-    InfoBubble.prototype.setBackgroundClassName;
+  InfoBubble.prototype.setBackgroundClassName;
 
 
 /**
@@ -312,7 +323,7 @@ InfoBubble.prototype.backgroundClassName_changed = function() {
   this.content_.className = this.get('backgroundClassName');
 };
 InfoBubble.prototype['backgroundClassName_changed'] =
-    InfoBubble.prototype.backgroundClassName_changed;
+  InfoBubble.prototype.backgroundClassName_changed;
 
 
 /**
@@ -324,7 +335,7 @@ InfoBubble.prototype.setTabClassName = function(className) {
   this.set('tabClassName', className);
 };
 InfoBubble.prototype['setTabClassName'] =
-    InfoBubble.prototype.setTabClassName;
+  InfoBubble.prototype.setTabClassName;
 
 
 /**
@@ -334,7 +345,7 @@ InfoBubble.prototype.tabClassName_changed = function() {
   this.updateTabStyles_();
 };
 InfoBubble.prototype['tabClassName_changed'] =
-    InfoBubble.prototype.tabClassName_changed;
+  InfoBubble.prototype.tabClassName_changed;
 
 
 /**
@@ -357,7 +368,7 @@ InfoBubble.prototype.setArrowStyle = function(style) {
   this.set('arrowStyle', style);
 };
 InfoBubble.prototype['setArrowStyle'] =
-    InfoBubble.prototype.setArrowStyle;
+  InfoBubble.prototype.setArrowStyle;
 
 
 /**
@@ -367,7 +378,7 @@ InfoBubble.prototype.arrowStyle_changed = function() {
   this.arrowSize_changed();
 };
 InfoBubble.prototype['arrowStyle_changed'] =
-    InfoBubble.prototype.arrowStyle_changed;
+  InfoBubble.prototype.arrowStyle_changed;
 
 
 /**
@@ -390,7 +401,7 @@ InfoBubble.prototype.setArrowSize = function(size) {
   this.set('arrowSize', size);
 };
 InfoBubble.prototype['setArrowSize'] =
-    InfoBubble.prototype.setArrowSize;
+  InfoBubble.prototype.setArrowSize;
 
 
 /**
@@ -400,7 +411,7 @@ InfoBubble.prototype.arrowSize_changed = function() {
   this.borderWidth_changed();
 };
 InfoBubble.prototype['arrowSize_changed'] =
-    InfoBubble.prototype.arrowSize_changed;
+  InfoBubble.prototype.arrowSize_changed;
 
 
 /**
@@ -412,7 +423,7 @@ InfoBubble.prototype.setArrowPosition = function(pos) {
   this.set('arrowPosition', pos);
 };
 InfoBubble.prototype['setArrowPosition'] =
-    InfoBubble.prototype.setArrowPosition;
+  InfoBubble.prototype.setArrowPosition;
 
 
 /**
@@ -436,7 +447,7 @@ InfoBubble.prototype.arrowPosition_changed = function() {
   this.redraw_();
 };
 InfoBubble.prototype['arrowPosition_changed'] =
-    InfoBubble.prototype.arrowPosition_changed;
+  InfoBubble.prototype.arrowPosition_changed;
 
 
 /**
@@ -517,7 +528,7 @@ InfoBubble.prototype.shadowStyle_changed = function() {
       break;
   }
   this.bubbleShadow_.style['boxShadow'] =
-      this.bubbleShadow_.style['webkitBoxShadow'] =
+    this.bubbleShadow_.style['webkitBoxShadow'] =
       this.bubbleShadow_.style['MozBoxShadow'] = shadow;
   this.bubbleShadow_.style['backgroundColor'] = backgroundColor;
   if (this.isOpen_) {
@@ -526,7 +537,7 @@ InfoBubble.prototype.shadowStyle_changed = function() {
   }
 };
 InfoBubble.prototype['shadowStyle_changed'] =
-    InfoBubble.prototype.shadowStyle_changed;
+  InfoBubble.prototype.shadowStyle_changed;
 
 
 /**
@@ -554,7 +565,7 @@ InfoBubble.prototype.hideCloseButton_changed = function() {
   this.close_.style['display'] = this.get('hideCloseButton') ? 'none' : '';
 };
 InfoBubble.prototype['hideCloseButton_changed'] =
-    InfoBubble.prototype.hideCloseButton_changed;
+  InfoBubble.prototype.hideCloseButton_changed;
 
 
 /**
@@ -568,7 +579,7 @@ InfoBubble.prototype.setBackgroundColor = function(color) {
   }
 };
 InfoBubble.prototype['setBackgroundColor'] =
-    InfoBubble.prototype.setBackgroundColor;
+  InfoBubble.prototype.setBackgroundColor;
 
 
 /**
@@ -579,11 +590,11 @@ InfoBubble.prototype.backgroundColor_changed = function() {
   this.contentContainer_.style['backgroundColor'] = backgroundColor;
 
   this.arrowInner_.style['borderColor'] = backgroundColor +
-      ' transparent transparent';
+    ' transparent transparent';
   this.updateTabStyles_();
 };
 InfoBubble.prototype['backgroundColor_changed'] =
-    InfoBubble.prototype.backgroundColor_changed;
+  InfoBubble.prototype.backgroundColor_changed;
 
 
 /**
@@ -610,16 +621,16 @@ InfoBubble.prototype.borderColor_changed = function() {
   contentContainer.style['borderColor'] = borderColor;
 
   arrowOuter.style['borderColor'] = borderColor +
-      ' transparent transparent';
+    ' transparent transparent';
 
   contentContainer.style['borderStyle'] =
-      arrowOuter.style['borderStyle'] =
+    arrowOuter.style['borderStyle'] =
       this.arrowInner_.style['borderStyle'] = 'solid';
 
   this.updateTabStyles_();
 };
 InfoBubble.prototype['borderColor_changed'] =
-    InfoBubble.prototype.borderColor_changed;
+  InfoBubble.prototype.borderColor_changed;
 
 
 /**
@@ -652,20 +663,20 @@ InfoBubble.prototype.borderRadius_changed = function() {
   var borderWidth = this.getBorderWidth_();
 
   this.contentContainer_.style['borderRadius'] =
-      this.contentContainer_.style['MozBorderRadius'] =
+    this.contentContainer_.style['MozBorderRadius'] =
       this.contentContainer_.style['webkitBorderRadius'] =
-      this.bubbleShadow_.style['borderRadius'] =
-      this.bubbleShadow_.style['MozBorderRadius'] =
-      this.bubbleShadow_.style['webkitBorderRadius'] = this.px(borderRadius);
+        this.bubbleShadow_.style['borderRadius'] =
+          this.bubbleShadow_.style['MozBorderRadius'] =
+            this.bubbleShadow_.style['webkitBorderRadius'] = this.px(borderRadius);
 
   this.tabsContainer_.style['paddingLeft'] =
-      this.tabsContainer_.style['paddingRight'] =
+    this.tabsContainer_.style['paddingRight'] =
       this.px(borderRadius + borderWidth);
 
   this.redraw_();
 };
 InfoBubble.prototype['borderRadius_changed'] =
-    InfoBubble.prototype.borderRadius_changed;
+  InfoBubble.prototype.borderRadius_changed;
 
 
 /**
@@ -704,8 +715,7 @@ InfoBubble.prototype.borderWidth_changed = function() {
   this.borderRadius_changed();
   this.redraw_();
 };
-InfoBubble.prototype['borderWidth_changed'] =
-    InfoBubble.prototype.borderWidth_changed;
+InfoBubble.prototype['borderWidth_changed'] = InfoBubble.prototype.borderWidth_changed;
 
 
 /**
@@ -828,8 +838,8 @@ InfoBubble.prototype.px = function(num) {
 InfoBubble.prototype.addEvents_ = function() {
   // We want to cancel all the events so they do not go to the map
   var events = ['mousedown', 'mousemove', 'mouseover', 'mouseout', 'mouseup',
-      'mousewheel', 'DOMMouseScroll', 'touchstart', 'touchend', 'touchmove',
-      'dblclick', 'contextmenu', 'click'];
+    'mousewheel', 'DOMMouseScroll', 'touchstart', 'touchend', 'touchmove',
+    'dblclick', 'contextmenu', 'click'];
 
   var bubble = this.bubble_;
   this.listeners_ = [];
@@ -927,7 +937,7 @@ InfoBubble.prototype.draw = function() {
       this.bubbleShadow_.style['left'] = this.px(left);
       this.bubbleShadow_.style['width'] = this.px(width);
       this.bubbleShadow_.style['height'] =
-          this.px(this.contentContainer_.offsetHeight - arrowSize);
+        this.px(this.contentContainer_.offsetHeight - arrowSize);
       break;
     case 2:
       // Shadow is below
@@ -984,13 +994,13 @@ InfoBubble.prototype.close = function() {
     this.bubble_.style['display'] = 'none';
     // Remove the animation so we next time it opens it will animate again
     this.bubble_.className =
-        this.bubble_.className.replace(this.animationName_, '');
+      this.bubble_.className.replace(this.animationName_, '');
   }
 
   if (this.bubbleShadow_) {
     this.bubbleShadow_.style['display'] = 'none';
     this.bubbleShadow_.className =
-        this.bubbleShadow_.className.replace(this.animationName_, '');
+      this.bubbleShadow_.className.replace(this.animationName_, '');
   }
   this.isOpen_ = false;
 };
@@ -1085,7 +1095,7 @@ InfoBubble.prototype.position_changed = function() {
   this.draw();
 };
 InfoBubble.prototype['position_changed'] =
-    InfoBubble.prototype.position_changed;
+  InfoBubble.prototype.position_changed;
 
 
 /**
@@ -1396,7 +1406,7 @@ InfoBubble.prototype.maxWidth_changed = function() {
   this.redraw_();
 };
 InfoBubble.prototype['maxWidth_changed'] =
-    InfoBubble.prototype.maxWidth_changed;
+  InfoBubble.prototype.maxWidth_changed;
 
 
 /**
@@ -1417,7 +1427,7 @@ InfoBubble.prototype.maxHeight_changed = function() {
   this.redraw_();
 };
 InfoBubble.prototype['maxHeight_changed'] =
-    InfoBubble.prototype.maxHeight_changed;
+  InfoBubble.prototype.maxHeight_changed;
 
 
 /**
@@ -1438,7 +1448,7 @@ InfoBubble.prototype.minWidth_changed = function() {
   this.redraw_();
 };
 InfoBubble.prototype['minWidth_changed'] =
-    InfoBubble.prototype.minWidth_changed;
+  InfoBubble.prototype.minWidth_changed;
 
 
 /**
@@ -1459,7 +1469,7 @@ InfoBubble.prototype.minHeight_changed = function() {
   this.redraw_();
 };
 InfoBubble.prototype['minHeight_changed'] =
-    InfoBubble.prototype.minHeight_changed;
+  InfoBubble.prototype.minHeight_changed;
 
 
 /**
@@ -1636,8 +1646,6 @@ InfoBubble.prototype.figureOutSize_ = function() {
   }
 
   var padding = this.getPadding_();
-  var borderWidth = this.getBorderWidth_();
-  var borderRadius = this.getBorderRadius_();
   var arrowSize = this.getArrowSize_();
 
   var mapDiv = map.getDiv();
@@ -1770,7 +1778,6 @@ InfoBubble.prototype['anchorPoint_changed'] = InfoBubble.prototype.anchorPoint_c
  * @private
  */
 InfoBubble.prototype.positionCloseButton_ = function() {
-  var br = this.getBorderRadius_();
   var bw = this.getBorderWidth_();
 
   var right = 2;
