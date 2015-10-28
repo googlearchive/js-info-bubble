@@ -1118,6 +1118,7 @@ InfoBubble.prototype.panToView = function() {
 
   var autopanMargin = this.get('autopanMargin');										// get the edge margin from options (or default)
   var anchorHeight = this.getAnchorHeight_();											// height of the marker icon - pixels
+  var arrowHeight = this.getArrowSize_();												// height of the infobubble bottom arrow - pixels
   var infobubbleHeight = this.bubble_.offsetHeight;									    // height of the infobubble - pixels
   var infobubbleWidth = this.bubble_.offsetWidth;									    // width of the infobubble - pixels
 
@@ -1131,9 +1132,9 @@ InfoBubble.prototype.panToView = function() {
 
   var mapCenter = projection.fromLatLngToContainerPixel(map.getCenter());			    // centre of the map - pixels
 
-  var spaceTop = markerPosition.y - infobubbleHeight - anchorHeight - autopanMargin;	// Find out how much space at the top is free (including the autopan margin) - pixels
-  var spaceRight = mapWidth - markerPosition.x - infobubbleWidth/2 - autopanMargin;		// Find out how much space at the top is free (including the autopan margin) - pixels
-  var spaceLeft =  markerPosition.x - infobubbleWidth/2 - autopanMargin;				// Find out how much space at the top is free (including the autopan margin) - pixels
+  var spaceTop = markerPosition.y - infobubbleHeight - arrowHeight - anchorHeight - autopanMargin;	// calculate free space or overrun at the top (including the autopan margin) - pixels
+  var spaceRight = mapWidth - markerPosition.x - infobubbleWidth/2 - autopanMargin;		// calculate free space or overrun on the right (including the autopan margin) - pixels
+  var spaceLeft =  markerPosition.x - infobubbleWidth/2 - autopanMargin;				// calculate free space or overrun on the left (including the autopan margin) - pixels
   
   if(spaceTop<0){
 	  mapCenter.y += spaceTop;				// if spaceTop is -ve, we have to move the map centre UP (ie delete the difference from the y-axis value) - hence we add the -ve spaceTop value
