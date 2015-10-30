@@ -1759,7 +1759,7 @@ InfoBubble.prototype.figureOutSize_ = function() {
   }
 
   this.contentContainer_.style['width'] = this.px(width);
- // this.contentContainer_.style['height'] = this.px(height);
+  this.contentContainer_.style['height'] = this.px(height);
 };
 
 
