@@ -1115,35 +1115,56 @@ InfoBubble.prototype.panToView = function() {
     // No Bubble yet so do nothing
     return;
   }
-
-  var autopanMargin = this.get('autopanMargin');										// get the edge margin from options (or default)
-  var anchorHeight = this.getAnchorHeight_();											// height of the marker icon - pixels
-  var arrowHeight = this.getArrowSize_();												// height of the infobubble bottom arrow - pixels
-  var infobubbleHeight = this.bubble_.offsetHeight;									    // height of the infobubble - pixels
-  var infobubbleWidth = this.bubble_.offsetWidth;									    // width of the infobubble - pixels
+  // get the edge margin from options (or default)
+  var autopanMargin = this.get('autopanMargin');
+  // height of the marker icon - pixels
+  var anchorHeight = this.getAnchorHeight_();
+  // height of the infobubble bottom arrow - pixels
+  var arrowHeight = this.getArrowSize_();
+  // height of the infobubble - pixels
+  var infobubbleHeight = this.bubble_.offsetHeight;
+  // width of the infobubble - pixels
+  var infobubbleWidth = this.bubble_.offsetWidth;
 
   var map = this.get('map');
-  var mapDiv = map.getDiv();															// the div containing the map
-  var mapHeight = mapDiv.offsetHeight;											    	// height of the div containing the map - pixels
-  var mapWidth = mapDiv.offsetWidth;													// height of the div containing the map - pixels
+  // the div containing the map
+  var mapDiv = map.getDiv();
+  // height of the div containing the map - pixels
+  var mapHeight = mapDiv.offsetHeight;
+  // height of the div containing the map - pixels
+  var mapWidth = mapDiv.offsetWidth;
 
-  var markerLatLng = this.getPosition();												// coordinate of the marker - lat/lng
-  var markerPosition = projection.fromLatLngToContainerPixel(markerLatLng);				// the marker position - pixels
+  // coordinate of the marker - lat/lng
+  var markerLatLng = this.getPosition();
+  // the marker position - pixels
+  var markerPosition = projection.fromLatLngToContainerPixel(markerLatLng);
 
-  var mapCenter = projection.fromLatLngToContainerPixel(map.getCenter());			    // centre of the map - pixels
-
-  var spaceTop = markerPosition.y - infobubbleHeight - arrowHeight - anchorHeight - autopanMargin;	// calculate free space or overrun at the top (including the autopan margin) - pixels
-  var spaceRight = mapWidth - markerPosition.x - infobubbleWidth/2 - autopanMargin;		// calculate free space or overrun on the right (including the autopan margin) - pixels
-  var spaceLeft =  markerPosition.x - infobubbleWidth/2 - autopanMargin;				// calculate free space or overrun on the left (including the autopan margin) - pixels
+  // centre of the map - pixels
+  var mapCenter = projection.fromLatLngToContainerPixel(map.getCenter());
+  // calculate top free space or overrun (incl autopan margin) - pixels
+  var spaceTop = markerPosition.y - infobubbleHeight - arrowHeight - anchorHeight - autopanMargin;
+  // calculate right side free space or overrun (incl autopan margin) - pixels
+  var spaceRight = mapWidth - markerPosition.x - infobubbleWidth/2 - autopanMargin;
+  // calculate left side free space or overrun (incl autopan margin) - pixels
+  var spaceLeft =  markerPosition.x - infobubbleWidth/2 - autopanMargin;
   
-  if(spaceTop<0){
-	  mapCenter.y += spaceTop;				// if spaceTop is -ve, we have to move the map centre UP (ie delete the difference from the y-axis value) - hence we add the -ve spaceTop value
+  if(spaceTop < 0){
+	/* if spaceTop is -ve, we have to move the map centre UP
+	(ie delete the difference from the y-axis value)
+	hence we add the -ve spaceTop value */
+	mapCenter.y += spaceTop;
   }
-  if(spaceRight<0){
-	  mapCenter.x -= spaceRight;			// if spaceRight is -ve, we have to move the map centre RIGHT (ie add the difference to the x-axis value) - hence we minus the -ve spaceRight value
+  if(spaceRight < 0){
+	/* if spaceRight is -ve, we have to move the map centre RIGHT
+	(ie add the difference to the x-axis value)
+	hence we minus the -ve spaceRight value */
+	mapCenter.x -= spaceRight;
   }
-  if(spaceLeft<0){
-	  mapCenter.x += spaceLeft;				// if spaceLeft is -ve, we have to move the map centre LEFT (ie delete the difference to the x-axis value) - hence we add the -ve spaceRight value
+  if(spaceLeft < 0){
+    /* if spaceLeft is -ve, we have to move the map centre LEFT
+	(ie delete the difference to the x-axis value)
+	hence we add the -ve spaceRight value */
+	mapCenter.x += spaceLeft;
   }
 
   newMapCenterlatLng = projection.fromContainerPixelToLatLng(mapCenter);
