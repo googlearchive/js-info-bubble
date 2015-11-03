@@ -846,7 +846,8 @@ InfoBubble.prototype.onAdd = function() {
     panes.floatShadow.appendChild(this.bubbleShadow_);
   }
 
-  google.maps.event.trigger(this, 'domready');          /* once the infoBubble has been added to the DOM, fire the 'domready' event */
+  /* once the infoBubble has been added to the DOM, fire 'domready' event */
+  google.maps.event.trigger(this, 'domready');
 };
 InfoBubble.prototype['onAdd'] = InfoBubble.prototype.onAdd;
 
