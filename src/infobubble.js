@@ -1779,8 +1779,6 @@ InfoBubble.prototype.figureOutSize_ = function() {
 /**
  *  Get the height of the anchor
  *
- *  This function is a hack for now and doesn't really work that good, need to
- *  wait for pixelBounds to be correctly exposed.
  *  @private
  *  @return {number} The height of the anchor.
  */
