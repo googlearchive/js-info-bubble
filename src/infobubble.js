@@ -1107,12 +1107,12 @@ InfoBubble.prototype.panToView = function() {
   var projection = this.getProjection();
 
   if (!projection) {
-    // The map projection is not ready yet so do nothing
+  // The map projection is not ready yet so do nothing
     return;
   }
 
   if (!this.bubble_) {
-    // No Bubble yet so do nothing
+  // No Bubble yet so do nothing
     return;
   }
   // get the edge margin from options (or default)
@@ -1142,32 +1142,34 @@ InfoBubble.prototype.panToView = function() {
   // centre of the map - pixels
   var mapCenter = projection.fromLatLngToContainerPixel(map.getCenter());
   // calculate top free space or overrun (incl autopan margin) - pixels
-  var spaceTop = markerPosition.y - infobubbleHeight - arrowHeight - anchorHeight - autopanMargin;
+  var spaceTop = markerPosition.y - infobubbleHeight - arrowHeight 
+  - anchorHeight - autopanMargin;
   // calculate right side free space or overrun (incl autopan margin) - pixels
-  var spaceRight = mapWidth - markerPosition.x - infobubbleWidth/2 - autopanMargin;
+  var spaceRight = mapWidth - markerPosition.x - infobubbleWidth / 2 
+  - autopanMargin;
   // calculate left side free space or overrun (incl autopan margin) - pixels
-  var spaceLeft =  markerPosition.x - infobubbleWidth/2 - autopanMargin;
+  var spaceLeft =  markerPosition.x - infobubbleWidth / 2 - autopanMargin;
   
-  if(spaceTop < 0){
-	/* if spaceTop is -ve, we have to move the map centre UP
-	(ie delete the difference from the y-axis value)
-	hence we add the -ve spaceTop value */
+  if(spaceTop < 0) {
+  /* if spaceTop is -ve, we have to move the map centre UP
+  (ie delete the difference from the y-axis value)
+  hence we add the -ve spaceTop value */
 	mapCenter.y += spaceTop;
   }
-  if(spaceRight < 0){
-	/* if spaceRight is -ve, we have to move the map centre RIGHT
-	(ie add the difference to the x-axis value)
-	hence we minus the -ve spaceRight value */
+  if(spaceRight < 0) {
+  /* if spaceRight is -ve, we have to move the map centre RIGHT
+  (ie add the difference to the x-axis value)
+  hence we minus the -ve spaceRight value */
 	mapCenter.x -= spaceRight;
   }
-  if(spaceLeft < 0){
-    /* if spaceLeft is -ve, we have to move the map centre LEFT
-	(ie delete the difference to the x-axis value)
-	hence we add the -ve spaceRight value */
+  if(spaceLeft < 0) {
+  /* if spaceLeft is -ve, we have to move the map centre LEFT
+  (ie delete the difference to the x-axis value)
+  hence we add the -ve spaceRight value */
 	mapCenter.x += spaceLeft;
   }
 
-  newMapCenterlatLng = projection.fromContainerPixelToLatLng(mapCenter);
+  var newMapCenterlatLng = projection.fromContainerPixelToLatLng(mapCenter);
 
   if (map.getCenter() != newMapCenterlatLng) {										
     map.panTo(newMapCenterlatLng);
