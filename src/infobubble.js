@@ -796,11 +796,11 @@ InfoBubble.prototype['setCloseSrc'] = InfoBubble.prototype.setCloseSrc;
 /**
  * Set the close image css class
  *
- * @param {string} css class of the image used as a close icon
+ * @param {string} className css class of the image used as a close icon
  */
-InfoBubble.prototype.setCloseClass = function(classname) {
-  if (classname && this.close_) {
-    this.close_.className = classname;
+InfoBubble.prototype.setCloseClass = function(className) {
+  if (className && this.close_) {
+    this.close_.className = className;
   }
 };
 InfoBubble.prototype['setCloseClass'] = InfoBubble.prototype.setCloseClass;
