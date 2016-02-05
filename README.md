@@ -2,7 +2,7 @@ InfoBubble – A Google Maps JavaScript API utility library
 ==============
 
 A Google Maps JavaScript API v3 library to create customizable CSS3-based InfoWindows. It supports tabbed content and uses CSS3 for rounded corners, drop shadows, and animations.
-![Analytics](https://ga-beacon.appspot.com/UA-12846745-20/js-info-bubble/readme?pixel)
+![Analytics](https://maps-ga-beacon.appspot.com/UA-12846745-20/js-info-bubble/readme?pixel)
 
 Migrated from the [Google Maps JavaScript API utility libraries on Google Code](https://code.google.com/p/google-maps-utility-library-v3/).
 
