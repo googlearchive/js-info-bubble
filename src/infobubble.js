@@ -94,6 +94,10 @@ function InfoBubble(opt_options) {
     options['closeSrc'] = this.CLOSE_SRC_;
   }
 
+  if (options['offset'] == undefined) {
+    options['offset'] = this.OFFSET_;
+  }
+
   this.buildDom_();
   this.setValues(options);
 }
@@ -185,6 +189,13 @@ InfoBubble.prototype.BACKGROUND_COLOR_ = '#fff';
  * @private
  */
 InfoBubble.prototype.CLOSE_SRC_ = 'https://maps.gstatic.com/intl/en_us/mapfiles/iw_close.gif';
+
+/**
+ * Default shift coordinates
+ * @const
+ * @private
+ */
+InfoBubble.prototype.OFFSET_ = { left: 0, top: 0 };
 
 /**
  * Extends a objects prototype by anothers.
@@ -900,6 +911,10 @@ InfoBubble.prototype.draw = function() {
   }
 
   var left = pos.x - (width * arrowPosition);
+  
+  // Apply offset
+  left += (this.offset && this.offset.left ? this.offset.left : 0);
+  top += (this.offset && this.offset.top ? this.offset.top : 0);
 
   this.bubble_.style['top'] = this.px(top);
   this.bubble_.style['left'] = this.px(left);
