@@ -222,6 +222,7 @@ InfoBubble.prototype.buildDom_ = function() {
   close.style['border'] = 0;
   close.style['zIndex'] = this.baseZIndex_ + 1;
   close.style['cursor'] = 'pointer';
+  close.className = 'js-info-bubble-close';
   close.src = this.get('closeSrc');
 
   var that = this;
