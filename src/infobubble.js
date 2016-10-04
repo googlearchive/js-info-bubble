@@ -93,6 +93,10 @@ function InfoBubble(opt_options) {
   if (options['closeSrc'] == undefined) {
     options['closeSrc'] = this.CLOSE_SRC_;
   }
+  
+  if (options['closeClass'] == undefined) {
+    options['closeClass'] = this.CLOSE_CLASS_;
+  }
 
   this.buildDom_();
   this.setValues(options);
@@ -187,6 +191,13 @@ InfoBubble.prototype.BACKGROUND_COLOR_ = '#fff';
 InfoBubble.prototype.CLOSE_SRC_ = 'https://maps.gstatic.com/intl/en_us/mapfiles/iw_close.gif';
 
 /**
+ * Default close image css class
+ * @const
+ * @private
+ */
+InfoBubble.prototype.CLOSE_CLASS_ = 'close-image';
+
+/**
  * Extends a objects prototype by anothers.
  *
  * @param {Object} obj1 The object to be extended.
@@ -224,6 +235,7 @@ InfoBubble.prototype.buildDom_ = function() {
   close.style['cursor'] = 'pointer';
   close.className = 'js-info-bubble-close';
   close.src = this.get('closeSrc');
+  close.className = this.get('closeClass');
 
   var that = this;
   google.maps.event.addDomListener(close, 'click', function() {
@@ -764,6 +776,18 @@ InfoBubble.prototype.setCloseSrc = function(src) {
   }
 };
 InfoBubble.prototype['setCloseSrc'] = InfoBubble.prototype.setCloseSrc;
+
+/**
+ * Set the close image css class
+ *
+ * @param {string} className css class of the image used as a close icon
+ */
+InfoBubble.prototype.setCloseClass = function(className) {
+  if (className && this.close_) {
+    this.close_.className = className;
+  }
+};
+InfoBubble.prototype['setCloseClass'] = InfoBubble.prototype.setCloseClass;
 
 
 /**
