@@ -70,6 +70,10 @@ function InfoBubble(opt_options) {
     options['disableAutoPan'] = false;
   }
 
+  if (options['autopanMargin'] == undefined) {
+    options['autopanMargin'] = this.AUTOPAN_MARGIN_;
+  }
+
   if (options['disableAnimation'] == undefined) {
     options['disableAnimation'] = false;
   }
@@ -178,6 +182,13 @@ InfoBubble.prototype.BORDER_RADIUS_ = 10;
  * @private
  */
 InfoBubble.prototype.BACKGROUND_COLOR_ = '#fff';
+
+/**
+ * Default autopan margin (from any edge)
+ * @const
+ * @private
+ */
+InfoBubble.prototype.AUTOPAN_MARGIN_ = 10;
 
 /**
  * Default close image source
@@ -1079,51 +1090,79 @@ InfoBubble.prototype['position_changed'] = InfoBubble.prototype.position_changed
  * Pan the InfoBubble into view
  */
 InfoBubble.prototype.panToView = function() {
+	
   var projection = this.getProjection();
 
   if (!projection) {
-    // The map projection is not ready yet so do nothing
+  // The map projection is not ready yet so do nothing
     return;
   }
 
   if (!this.bubble_) {
-    // No Bubble yet so do nothing
+  // No Bubble yet so do nothing
     return;
   }
-
+  // get the edge margin from options (or default)
+  var autopanMargin = this.get('autopanMargin');
+  // height of the marker icon - pixels
   var anchorHeight = this.getAnchorHeight_();
-  var height = this.bubble_.offsetHeight + anchorHeight;
+  // height of the infobubble bottom arrow - pixels
+  var arrowHeight = this.getArrowSize_();
+  // height of the infobubble - pixels
+  var infobubbleHeight = this.bubble_.offsetHeight;
+  // width of the infobubble - pixels
+  var infobubbleWidth = this.bubble_.offsetWidth;
+
   var map = this.get('map');
+  // the div containing the map
   var mapDiv = map.getDiv();
+  // height of the div containing the map - pixels
   var mapHeight = mapDiv.offsetHeight;
+  // height of the div containing the map - pixels
+  var mapWidth = mapDiv.offsetWidth;
 
-  var latLng = this.getPosition();
-  var centerPos = projection.fromLatLngToContainerPixel(map.getCenter());
-  var pos = projection.fromLatLngToContainerPixel(latLng);
+  // coordinate of the marker - lat/lng
+  var markerLatLng = this.getPosition();
+  // the marker position - pixels
+  var markerPosition = projection.fromLatLngToContainerPixel(markerLatLng);
 
-  // Find out how much space at the top is free
-  var spaceTop = centerPos.y - height;
-
-  // Fine out how much space at the bottom is free
-  var spaceBottom = mapHeight - centerPos.y;
-
-  var needsTop = spaceTop < 0;
-  var deltaY = 0;
-
-  if (needsTop) {
-    spaceTop *= -1;
-    deltaY = (spaceTop + spaceBottom) / 2;
+  // centre of the map - pixels
+  var mapCenter = projection.fromLatLngToContainerPixel(map.getCenter());
+  // calculate top free space or overrun (incl autopan margin) - pixels
+  var spaceTop = markerPosition.y - infobubbleHeight - arrowHeight 
+  - anchorHeight - autopanMargin;
+  // calculate right side free space or overrun (incl autopan margin) - pixels
+  var spaceRight = mapWidth - markerPosition.x - infobubbleWidth / 2 
+  - autopanMargin;
+  // calculate left side free space or overrun (incl autopan margin) - pixels
+  var spaceLeft =  markerPosition.x - infobubbleWidth / 2 - autopanMargin;
+  
+  if(spaceTop < 0) {
+  /* if spaceTop is -ve, we have to move the map centre UP
+  (ie delete the difference from the y-axis value)
+  hence we add the -ve spaceTop value */
+	mapCenter.y += spaceTop;
+  }
+  if(spaceRight < 0) {
+  /* if spaceRight is -ve, we have to move the map centre RIGHT
+  (ie add the difference to the x-axis value)
+  hence we minus the -ve spaceRight value */
+	mapCenter.x -= spaceRight;
+  }
+  if(spaceLeft < 0) {
+  /* if spaceLeft is -ve, we have to move the map centre LEFT
+  (ie delete the difference to the x-axis value)
+  hence we add the -ve spaceRight value */
+	mapCenter.x += spaceLeft;
   }
 
-  pos.y -= deltaY;
-  latLng = projection.fromContainerPixelToLatLng(pos);
+  var newMapCenterlatLng = projection.fromContainerPixelToLatLng(mapCenter);
 
-  if (map.getCenter() != latLng) {
-    map.panTo(latLng);
+  if (map.getCenter() != newMapCenterlatLng) {										
+    map.panTo(newMapCenterlatLng);
   }
 };
 InfoBubble.prototype['panToView'] = InfoBubble.prototype.panToView;
-
 
 /**
  * Converts a HTML string to a document fragment.
@@ -1727,8 +1766,6 @@ InfoBubble.prototype.figureOutSize_ = function() {
 /**
  *  Get the height of the anchor
  *
- *  This function is a hack for now and doesn't really work that good, need to
- *  wait for pixelBounds to be correctly exposed.
  *  @private
  *  @return {number} The height of the anchor.
  */
